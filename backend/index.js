@@ -9,8 +9,8 @@ dotenv.config();
 
 conectarDB();
 
-console.log(process.env.HOLA)
+const PORT = process.env.PORT || 4000; //revia si existe variable de entorono sino asigna 4000
 
-app.listen(4000, () => {
-    console.log('Servidor Corriendo en el Puerto');
+app.listen(PORT, () => {
+    console.log(`Servidor Corriendo en el Puerto: ${PORT}`);
 })
