@@ -30,7 +30,7 @@ const usuarioSchema = mongoose.Schema({
 })
 
 usuarioSchema.pre('save', async function(next) {
-    if( !this.isModified('password')) {
+    if( !this.isModified('password')) { //comprobar si el password no está hasheado (no es nuevo password)
         next()
     }
     const salt = await bcrypt.genSalt(10)
