@@ -78,7 +78,6 @@ const eliminarProyecto = async ( req, res ) => {
             const error = new Error('Acción no válida')
             return res.status(401).json({msg: error.message})
         }
-        res.json(proyecto)
 
         try {
             await proyecto.deleteOne();
