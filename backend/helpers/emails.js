@@ -26,3 +26,31 @@ export const emailRegistro = async (datos) => {
         `
     })
 }
+
+export const emailOlvidePassword = async (datos) => {
+    const { email, nombre, token } = datos;
+
+    //TODO: mover haca variables de entorno
+    const transport = nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "b6d1fab3757769",
+          pass: "92256421d73feb"
+        }
+    });
+
+    //información del email
+    const info = await transport.sendMail({
+        from: '"TasksHero - Administrador de Proyectos" <cuentas@taskshero.com>',
+        to: email,
+        subject: "TasksHero - Reestablece tu password",
+        text: "Reestablece tu password",
+        html: `<p>Hola: ${nombre}. Has solicitado reestablecer tu password</p>
+        <p>Sigue el siguiente enlace para generar un nuevo password:</p>
+            <a href="${process.env.FRONTEND_URL}/olvide-password/${token}">Reestablecer Password</a>
+        <p>Si no solicitaste esto puedes ignorar este correo</p>
+        
+        `
+    })
+}
