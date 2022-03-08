@@ -9,12 +9,14 @@ import RutaProtegida from './layouts/RutaProtegida'
 import Proyectos from './pages/Proyectos'
 import NuevoProyecto from './pages/NuevoProyecto'
 import { AuthProvider } from './context/AuthProvider'
+import { ProyectosProvider } from './context/ProyectosProvider'
 
 function App() {
   
   return (
    <BrowserRouter>
     <AuthProvider>
+      <ProyectosProvider>
         <Routes>
             <Route path='/' element={<AuthLayout/>}>
               <Route index element={<Login />} />
@@ -30,6 +32,7 @@ function App() {
             </Route>
 
         </Routes>
+      </ProyectosProvider>
     </AuthProvider>
    </BrowserRouter>
   )
