@@ -29,17 +29,8 @@ const obtenerProyecto = async ( req, res ) => {
                 return res.status(401).json({msg: error.message})
             }
 
-            //Obtener las tareas del proyecto
-            try {
-                const tareas = await Tarea.find().where('proyecto').equals(proyecto._id)
-                res.json({
-                    proyecto,
-                    tareas
-                })
+            res.json(proyecto)
     
-            } catch (error) {
-                console.log(error)
-            }
         } catch (error) {
             error = new Error('No encontrado')
             return res.status(404).json({msg: error.message})
