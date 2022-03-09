@@ -49,7 +49,6 @@ const editarProyecto = async ( req, res ) => {
             const error = new Error('Acción no válida')
             return res.status(401).json({msg: error.message})
         }
-        res.json(proyecto)
 
         proyecto.nombre = req.body.nombre || proyecto.nombre;
         proyecto.descripcion = req.body.descripcion || proyecto.descripcion;

@@ -11,6 +11,8 @@ const Login = () => {
     //TODO: mover alerta hacia su propio context
     const [ alerta, setAlerta ] = useState({})
 
+    const navigate = useNavigate()
+
     const { setAuth } = useAuth();
 
     const handleSubmit = async e => {
@@ -29,6 +31,7 @@ const Login = () => {
             setAlerta({})
             localStorage.setItem('token', data.token)
             setAuth(data)
+            navigate('/proyectos')
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,

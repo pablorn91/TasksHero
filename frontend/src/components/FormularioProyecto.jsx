@@ -1,15 +1,30 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
+import { useParams } from "react-router-dom"
 import useProyectos from "../hooks/useProyectos"
 import Alerta from '../components/Alerta'
 
 const FormularioProyecto = () => {
 
+    const [ id, setId ] = useState(null)
     const [ nombre, setNombre ] = useState('')
     const [ descripcion, setDescripcion ] = useState('')
     const [ fechaEntrega, setFechaEntrega ] = useState('')
     const [ cliente, setCliente ] = useState('')
 
-    const { alerta ,mostrarAlerta, submitProyecto } = useProyectos()
+    const params = useParams();
+
+    const { alerta ,mostrarAlerta, submitProyecto, proyecto } = useProyectos()
+
+    useEffect(() => {
+        if(params.id) {
+            setId(proyecto._id)
+            setNombre(proyecto.nombre)
+            setDescripcion(proyecto.descripcion)
+            setFechaEntrega(proyecto.fechaEntrega?.split('T')[0])
+            setCliente(proyecto.cliente)
+        }
+    },[params])
+
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -23,7 +38,8 @@ const FormularioProyecto = () => {
         }
 
         //Pasar los datos hacia el provider
-        await submitProyecto({ nombre, descripcion, fechaEntrega, cliente })
+        await submitProyecto({ id, nombre, descripcion, fechaEntrega, cliente })
+        setId(null)
         setNombre('')
         setDescripcion('')
         setFechaEntrega('')
@@ -38,7 +54,7 @@ const FormularioProyecto = () => {
     <>
 
         <form 
-        className="bg-white py-10 px-5 md:w-1/2 rounded-lg shadow"
+        className="bg-white py-10 px-5 md:w-2/3  rounded-lg shadow"
         onSubmit={handleSubmit}
         >
             
@@ -104,7 +120,7 @@ const FormularioProyecto = () => {
 
             <input 
                 type="submit"
-                value="Crear Proyecto"
+                value={id ? 'Actualizar': 'Crear Proyecto'}
                 className="bg-sky-600 w-full p-3 uppercase font-bold text-white rounded cursor-pointer hover:bg-sky-700 transition-colors"
             />
 
