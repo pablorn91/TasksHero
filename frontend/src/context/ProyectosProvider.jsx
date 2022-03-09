@@ -2,6 +2,8 @@ import { useState, useEffect, createContext } from 'react'
 import clienteAxios from '../config/clienteAxios'
 import { useNavigate } from 'react-router-dom';
 
+import useAuth from '../hooks/useAuth';
+
 const ProyectosContext = createContext();
 
 const ProyectosProvider = ({children}) => {
@@ -12,10 +14,13 @@ const ProyectosProvider = ({children}) => {
     const [ cargando, setCargando ] = useState(false)
 
     const navigate = useNavigate()
+    const { auth } = useAuth()
 
     useEffect(() => {
         const obtenerProyectos = async () => {
+            
             try {
+                
                 const token = localStorage.getItem('token')
             if (!token) return
 
@@ -27,12 +32,14 @@ const ProyectosProvider = ({children}) => {
             }
             const { data } = await clienteAxios('/proyectos',  config)
             setProyectos(data)
+            navigate('/proyectos')
             } catch (error) {
                console.log(error) 
             }
+           
         }
         obtenerProyectos()
-    }, [])
+    }, [auth])
 
     const mostrarAlerta = alerta => {
         setAlerta(alerta)
