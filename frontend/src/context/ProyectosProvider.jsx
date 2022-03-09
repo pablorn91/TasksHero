@@ -33,7 +33,6 @@ const ProyectosProvider = ({children}) => {
             }
             const { data } = await clienteAxios('/proyectos',  config)
             setProyectos(data)
-            navigate('/proyectos')
             } catch (error) {
                console.log(error) 
             }
@@ -190,7 +189,28 @@ const ProyectosProvider = ({children}) => {
 
      const handleModalTarea = () => {
          setModalFormTarea(!modalFormTarea)
-     }                                                                                                                                                                   
+     }      
+     
+     const submitTarea = async tarea => {
+
+        try {
+            const token = localStorage.getItem('token')
+            if (!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const { data } = await clienteAxios.post('/tareas', tarea, config)
+            console.log(data)
+            
+        } catch (error) {
+            console.log(error)
+        }
+     }
 
     return (
         <ProyectosContext.Provider
@@ -204,7 +224,8 @@ const ProyectosProvider = ({children}) => {
                 cargando,
                 eliminarProyecto,
                 modalFormTarea,
-                handleModalTarea
+                handleModalTarea,
+                submitTarea
             }}
         >{children}
         </ProyectosContext.Provider>

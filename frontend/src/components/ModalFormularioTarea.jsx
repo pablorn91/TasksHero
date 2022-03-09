@@ -1,6 +1,8 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useProyectos from '../hooks/useProyectos'
+import Alerta from './Alerta'
+import { useParams } from 'react-router-dom'
 
 const PRIORIDAD = [ 'Baja', 'Media', 'Alta']
 
@@ -8,9 +10,27 @@ const ModalFormularioTarea = () => {
 
     const [nombre, setNombre] = useState('')
     const [descripcion, setDescripcion] = useState('')
+    const [fechaEntrega, setFechaEntrega] = useState('')
     const [prioridad, setPrioridad] = useState('')
+
+    const params = useParams()
  
-    const { modalFormTarea, handleModalTarea } = useProyectos()
+    const { modalFormTarea, handleModalTarea,mostrarAlerta, alerta, submitTarea } = useProyectos()
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        if ([nombre,descripcion, fechaEntrega, prioridad].includes('')){
+            mostrarAlerta({
+                msg:'Todos los campos son Obligatorios',
+                error: true
+            })
+            return
+        }
+
+        submitTarea({nombre, descripcion, fechaEntrega, prioridad, proyecto: params.id})
+    }
+
+    const { msg } = alerta
 
     return (
         <Transition.Root show={ modalFormTarea } as={Fragment}>
@@ -67,7 +87,12 @@ const ModalFormularioTarea = () => {
                                         Crear Tarea
                                     </Dialog.Title>
 
-                                    <form action="my-10">
+                                    {msg && <Alerta alerta={alerta}/>}
+
+                                    <form 
+                                        className="my-6"
+                                        onSubmit={handleSubmit}
+                                    >
 
                                         <div className='mb-5'>
                                                 <label 
@@ -85,7 +110,23 @@ const ModalFormularioTarea = () => {
                                                     onChange={e => setNombre(e.target.value)}
                                                 />    
                                         </div>
-
+ 
+                                        <div className='mb-5'>
+                                                <label 
+                                                    htmlFor="fecha-entrega"
+                                                    className='text-gray-700 uppercase font-bold text-sm'
+                                                >
+                                                    Fecha Entrega
+                                                </label>
+                                                <input 
+                                                    type="date" 
+                                                    id='fecha-entrega'
+                                                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                                                    value={fechaEntrega}
+                                                    onChange={e => setFechaEntrega(e.target.value)}
+                                                />    
+                                        </div>
+ 
                                         <div className='mb-5'>
                                                 <label 
                                                     htmlFor="prioridad"
@@ -107,7 +148,7 @@ const ModalFormularioTarea = () => {
                                         </div>
 
                                         <div className='mb-5'>
-                                                <label 
+                                                <label     
                                                     htmlFor="descripcion"
                                                     className='text-gray-700 uppercase font-bold text-sm'
                                                 >

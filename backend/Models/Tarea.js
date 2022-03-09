@@ -31,8 +31,8 @@ const tareaSchema = mongoose.Schema({
     }
 
 }, {
-    timeStamps: true
-});
+    timestamps: true,
+})
 
 const Tarea = mongoose.model('Tarea', tareaSchema);
 
