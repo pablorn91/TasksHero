@@ -32,6 +32,7 @@ const ProyectosProvider = ({children}) => {
                 }
             }
             const { data } = await clienteAxios('/proyectos',  config)
+            
             setProyectos(data)
             } catch (error) {
                console.log(error) 
@@ -205,7 +206,12 @@ const ProyectosProvider = ({children}) => {
             }
 
             const { data } = await clienteAxios.post('/tareas', tarea, config)
-            console.log(data)
+
+            const proyectoActualizado = {...proyecto}
+            proyectoActualizado.tareas = [... proyecto.tareas, data]
+            setProyecto(proyectoActualizado)
+            setAlerta({})
+            setModalFormTarea(false)
             
         } catch (error) {
             console.log(error)
