@@ -12,8 +12,9 @@ const ProyectosProvider = ({children}) => {
     const [ alerta, setAlerta ] = useState({})
     const [ proyecto, setProyecto ] = useState({})
     const [ cargando, setCargando ] = useState(false)
-    const [modalFormTarea, setModalFormTarea ] =useState(false)
+    const [modalFormTarea, setModalFormTarea ] = useState(false)
     const [ tarea, setTarea ] = useState({})
+    const [ modalEliminarTarea, setModalEliminarTarea ] = useState(false)
 
     const navigate = useNavigate()
     const { auth } = useAuth()
@@ -192,8 +193,47 @@ const ProyectosProvider = ({children}) => {
      const handleModalTarea = () => {
          setModalFormTarea(!modalFormTarea)
          setTarea({})
+     }   
+     
+     const handleModalEditarTarea = tarea => {
+        setTarea(tarea)
+        setModalFormTarea(true)
+     }
+     
+     const handleModalEliminarTarea = tarea => {
+         setModalEliminarTarea(!modalEliminarTarea)
+         setTarea(tarea)
      }      
      
+     const eliminarTarea = async () => {
+         try {
+            const token = localStorage.getItem('token')
+            if (!token) return
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await clienteAxios.delete(`/tareas/${tarea._id}`, config)
+            setAlerta({
+                msg: data.msg,
+                error: false
+            })
+
+            const proyectoActualizado = {...proyecto}
+            proyectoActualizado.tareas = proyectoActualizado.tareas.filter(tareaState => tareaState._id !== tarea._id)
+            setProyecto(proyectoActualizado)
+            setModalEliminarTarea(false)
+            setTarea({})
+            setTimeout(() => {
+                setAlerta({})
+            }, 3000);
+         } catch (error) {
+             console.log(error)
+         }
+     }
      const submitTarea = async tarea => {
 
         if(tarea?.id) {
@@ -254,11 +294,6 @@ const ProyectosProvider = ({children}) => {
         }
      }
 
-     const handleModalEditarTarea = tarea => {
-        setTarea(tarea)
-        setModalFormTarea(true)
-     }
-
     return (
         <ProyectosContext.Provider
             value={{
@@ -274,7 +309,10 @@ const ProyectosProvider = ({children}) => {
                 handleModalTarea,
                 submitTarea,
                 handleModalEditarTarea,
-                tarea
+                tarea,
+                modalEliminarTarea,
+                handleModalEliminarTarea,
+                eliminarTarea
             }}
         >{children}
         </ProyectosContext.Provider>
