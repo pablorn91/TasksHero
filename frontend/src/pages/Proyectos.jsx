@@ -1,9 +1,12 @@
 import useProyectos from "../hooks/useProyectos"
 import PreviewProyecto from "../components/PreviewProyecto"
+import Cargar from "../components/Cargar"
 
 const Proyectos = () => {
 
-  const { proyectos } = useProyectos()
+  const { proyectos, cargando } = useProyectos()
+
+  if (cargando) return <Cargar/>
 
   return (
 
