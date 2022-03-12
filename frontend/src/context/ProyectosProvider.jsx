@@ -23,7 +23,7 @@ const ProyectosProvider = ({children}) => {
         const obtenerProyectos = async () => {
             
             try {
-                
+                setCargando(true)
                 const token = localStorage.getItem('token')
             if (!token) return
 
@@ -39,6 +39,7 @@ const ProyectosProvider = ({children}) => {
             } catch (error) {
                console.log(error) 
             }
+            setCargando(false)
            
         }
         obtenerProyectos()
@@ -294,6 +295,10 @@ const ProyectosProvider = ({children}) => {
         }
      }
 
+     const submitColaborador = async email => {
+            console.log(email)
+     }
+
     return (
         <ProyectosContext.Provider
             value={{
@@ -312,7 +317,8 @@ const ProyectosProvider = ({children}) => {
                 tarea,
                 modalEliminarTarea,
                 handleModalEliminarTarea,
-                eliminarTarea
+                eliminarTarea,
+                submitColaborador
             }}
         >{children}
         </ProyectosContext.Provider>
