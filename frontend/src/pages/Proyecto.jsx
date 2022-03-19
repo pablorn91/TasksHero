@@ -23,6 +23,8 @@ const Proyecto = () => {
 
    const { nombre } = proyecto
 
+   console.log(proyecto)
+
    const { msg } =alerta
 
   return (
