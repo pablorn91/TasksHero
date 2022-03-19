@@ -1,10 +1,13 @@
 import useProyectos from "../hooks/useProyectos"
 import PreviewProyecto from "../components/PreviewProyecto"
 import Cargar from "../components/Cargar"
+import Alerta from "../components/Alerta"
 
 const Proyectos = () => {
 
-  const { proyectos, cargando } = useProyectos()
+  const { proyectos, cargando, alerta } = useProyectos()
+
+  const { msg } = alerta
 
   if (cargando) return <Cargar/>
 
@@ -12,6 +15,8 @@ const Proyectos = () => {
 
         <>
             <h1 className="text-4xl font-black">Proyectos</h1>
+
+            { msg && <Alerta alerta={alerta } /> }
 
             <div className="bg-white shadow mt-10 rounded-lg">
                 

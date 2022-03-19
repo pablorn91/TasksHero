@@ -148,10 +148,14 @@ const ProyectosProvider = ({children}) => {
            setAlerta({})
            
        } catch (error) {
+           navigate('/proyectos')
            setAlerta({
                msg: error.response.data.msg,
                error: true
            })
+           setTimeout(() => {
+               setAlerta({})
+           }, 2000);
        } finally {
            setTimeout(() => {
                setCargando(false)
